@@ -13,9 +13,11 @@ const useStyle = makeStyles((theme) => ({
 
 const Header = () => {
     const classes = useStyle();
-    const [value, setvalue] = useState(0);
+    const [value, setvalue] = useState("coincheck");
 
-    const handleChange = (event: React.ChangeEvent<{}>, newValue: number)  => {
+    const handleChange = (event: React.ChangeEvent<{}>, newValue: string)  => {
+        console.log(newValue)
+        console.log(event)
         setvalue(newValue)
     }
 
@@ -38,10 +40,10 @@ const Header = () => {
                         onChange={handleChange}
                         centered
                         >
-                        <Tab label="Coincheck" />
-                        <Tab label="GMO coin" />
-                        <Tab label="Zaif" />
-                        <Tab label="Binance" />
+                        <Tab label="Coincheck" value="coincheck" />
+                        <Tab label="GMO coin" value="gmocoin" />
+                        <Tab label="Zaif" value="zaif" />
+                        <Tab label="Binance" value="binance" />
                     </Tabs>
                 </Paper>
             </AppBar>
