@@ -21,6 +21,6 @@ export const stockSlice = createSlice({
 
 export const { getStockState } = stockSlice.actions;
 
-export const selectStock = { state: RootState } => state.stock.value
+// export const selectStock = { state: RootState } => state.stock.value;
 
 export default stockSlice.reducer;
