@@ -1,11 +1,11 @@
 import React from 'react'
 
-const Stock = () => {
+const Zaif = () => {
     return (
         <div>
-            
+            <h1>zaif page</h1>
         </div>
     )
 }
 
-export default Stock
+export default Zaif
