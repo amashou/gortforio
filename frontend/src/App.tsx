@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import './App.css';
 import CleanUp from './CleanUp';
 import axios from 'axios'
+
+import Header from './components/Header'
 // import StockView from './StockView';
 
 const App: React.FC = () => {
@@ -21,6 +23,7 @@ const App: React.FC = () => {
 
   return (
     <div className="App">
+      <Header />
       <h4>{status}</h4>
       <header className="App-header">
         <button onClick={getXemBalance}>XENの情報を取得する</button>
