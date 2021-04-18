@@ -1,5 +1,5 @@
-import React from 'react'
-import { AppBar, IconButton, makeStyles, Toolbar, Typography } from '@material-ui/core'
+import React, { useState } from 'react'
+import { AppBar, IconButton, makeStyles, Toolbar, Typography, Tabs, Tab, Paper } from '@material-ui/core'
 import MenuIcon from '@material-ui/icons/Menu'
 
 const useStyle = makeStyles((theme) => ({
@@ -13,6 +13,11 @@ const useStyle = makeStyles((theme) => ({
 
 const Header = () => {
     const classes = useStyle();
+    const [value, setvalue] = useState(0);
+
+    const handleChange = (event: React.ChangeEvent<{}>, newValue: number)  => {
+        setvalue(newValue)
+    }
 
     return (
         <div>
@@ -25,6 +30,20 @@ const Header = () => {
                         GortfoRio
                     </Typography>
                 </Toolbar>
+                <Paper square className={classes.root}>
+                    <Tabs indicatorColor="primary"
+                        value={value}
+                        textColor="primary"
+                        aria-label="simple tabs example"
+                        onChange={handleChange}
+                        centered
+                        >
+                        <Tab label="Coincheck" />
+                        <Tab label="GMO coin" />
+                        <Tab label="Zaif" />
+                        <Tab label="Binance" />
+                    </Tabs>
+                </Paper>
             </AppBar>
         </div>
     )
