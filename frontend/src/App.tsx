@@ -3,16 +3,24 @@ import { Counter } from './features/counter/Counter';
 import './App.css';
 import CleanUp from './CleanUp';
 import axios from 'axios'
+import StockView from './StockView';
 
 const App: React.FC = () => {
   const [status, setStatus] = useState("first step");
   const [display, setDisplay] = useState(true);
+  const [stock, setStock] = useState({})
 
   const getXemBalance = () => {
     // axios.defaults.baseURL = 'http://localhost:8080';
     // axios.defaults.headers.get['Content-Type'] = 'application/json';
     // axios.defaults.headers.get['Access-Control-Allow-Origin'] = '*';
-    axios.get("http://localhost:8080/xem").then((res: any) => console.log(res.data)).catch((err) => {console.log("レスポンスに発生しました:", err)})
+    axios.get("http://localhost:8080/xem")
+      .then((res: any) => {
+        setStock(res.data)
+      })
+      .catch(
+        (err: any) => {console.log("レスポンスに発生しました:", err)}
+      )
   }
 
   return (
@@ -21,7 +29,7 @@ const App: React.FC = () => {
       <header className="App-header">
         {display &&  <CleanUp />}
         <button onClick={() => setDisplay(!display)}>Toggle Display</button>
-
+        <StockView />
         <button onClick={getXemBalance}>XENの情報を取得する</button>
 
         <Counter />
