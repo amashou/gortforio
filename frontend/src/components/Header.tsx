@@ -1,6 +1,7 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { AppBar, IconButton, makeStyles, Toolbar, Typography, Tabs, Tab, Paper } from '@material-ui/core'
 import MenuIcon from '@material-ui/icons/Menu'
+import { useHistory, useLocation } from 'react-router'
 
 const useStyle = makeStyles((theme) => ({
     root: {
@@ -13,13 +14,18 @@ const useStyle = makeStyles((theme) => ({
 
 const Header = () => {
     const classes = useStyle();
-    const [value, setvalue] = useState("coincheck");
+    const [value, setValue] = useState("");
+    const history = useHistory();
+    const location = useLocation();
+
+    useEffect(() => {
+        const uri = location.pathname.slice(1)
+        setValue(uri)
+    }, [])
 
     const handleChange = (event: React.ChangeEvent<{}>, newValue: string)  => {
-        console.log(newValue)
-        console.log(event)
-        setvalue(newValue)
-
+        setValue(newValue);
+        history.push(`/${newValue}`);
     }
 
     return (

@@ -30,7 +30,7 @@ const App: React.FC = () => {
             <Route path="/coincheck">
               <Coincheck />
             </Route>
-            <Route path="/gmo">
+            <Route path="/gmocoin">
               <Gmo />
             </Route>
             <Route path="/binance">
