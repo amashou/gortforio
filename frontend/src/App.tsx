@@ -3,7 +3,7 @@ import { Counter } from './features/counter/Counter';
 import './App.css';
 import CleanUp from './CleanUp';
 import axios from 'axios'
-import StockView from './StockView';
+// import StockView from './StockView';
 
 const App: React.FC = () => {
   const [status, setStatus] = useState("first step");
@@ -29,7 +29,6 @@ const App: React.FC = () => {
       <header className="App-header">
         {display &&  <CleanUp />}
         <button onClick={() => setDisplay(!display)}>Toggle Display</button>
-        <StockView />
         <button onClick={getXemBalance}>XENの情報を取得する</button>
 
         <Counter />
