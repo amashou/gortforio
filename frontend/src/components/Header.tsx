@@ -19,6 +19,7 @@ const Header = () => {
         console.log(newValue)
         console.log(event)
         setvalue(newValue)
+
     }
 
     return (

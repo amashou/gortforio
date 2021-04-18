@@ -1,33 +1,46 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import './App.css';
-import CleanUp from './CleanUp';
-import axios from 'axios'
+import { Switch, Route } from 'react-router-dom';
 
 import Header from './components/Header'
-// import StockView from './StockView';
+import Coincheck from './pages/Coincheck';
+import Gmo from './pages/Gmo';
+import Binance from './pages/Binance';
+import Zaif from './pages/Zaif';
+import Top from './pages/Top';
+import { Container, makeStyles } from '@material-ui/core';
+
+const useStyle = makeStyles((theme) => ({
+  container: {
+    marginTop: '120px',
+  }
+}));
 
 const App: React.FC = () => {
-  const [status, setStatus] = useState("first step");
-  const [display, setDisplay] = useState(true);
-  const [stock, setStock] = useState({})
-
-  const getXemBalance = () => {
-    axios.get("http://localhost:8080/xem")
-      .then((res: any) => {
-        setStock(res.data)
-      })
-      .catch(
-        (err: any) => {console.log("レスポンスに発生しました:", err)}
-      )
-  }
+  const classes = useStyle();
 
   return (
     <div className="App">
       <Header />
-      <h4>{status}</h4>
-      <header className="App-header">
-        <button onClick={getXemBalance}>XENの情報を取得する</button>
-      </header>
+      <Container className={classes.container}>
+        <Switch>
+          <Route exact path="/">
+              <Top />
+            </Route>
+            <Route path="/coincheck">
+              <Coincheck />
+            </Route>
+            <Route path="/gmo">
+              <Gmo />
+            </Route>
+            <Route path="/binance">
+              <Binance />
+            </Route>
+            <Route path="/zaif">
+              <Zaif />
+            </Route>
+          </Switch>
+      </Container>
     </div>
   );
 }
