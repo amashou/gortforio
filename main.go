@@ -5,12 +5,15 @@ package main
 import (
 	// "database/sql"
 
+	"crypto/hmac"
+	"crypto/sha256"
+	"encoding/hex"
 	"fmt"
 	"io/ioutil"
-	"log"
 	"net/http"
-
-	_ "github.com/mattn/go-sqlite3"
+	// "io/ioutil"
+	// "net/http"
+	// _ "github.com/mattn/go-sqlite3"
 )
 
 // type JsonTestData struct {
@@ -81,9 +84,34 @@ func viewHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "<h2>%s</h2><div>%s</div>", p.Title, p.Body)
 }
 
+var DB = map[string]string{
+	"User1Key": "User1Secret",
+	"User2Key": "User2Secret",
+}
+
+func Server(apiKey, sign string, data []byte) {
+	apiSecret := DB[apiKey]
+	h := hmac.New(sha256.New, []byte(apiSecret))
+	h.Write(data)
+	expectedHMAC := hex.EncodeToString(h.Sum(nil))
+	fmt.Println(sign == expectedHMAC)
+}
+
 func main() {
-	http.HandleFunc("/view/", viewHandler)
-	log.Fatalln(http.ListenAndServe(":8080", nil))
+	const apiKey = "User1Key"
+	const apiSecret = "User1Secret"
+
+	data := []byte("data")
+	h := hmac.New(sha256.New, []byte(apiSecret))
+	h.Write(data)
+	sign := hex.EncodeToString(h.Sum(nil))
+	fmt.Println(sign)
+
+	Server(apiKey, sign, data)
+
+	// http.HandleFunc("/view/", viewHandler)
+	// http.HandleFunc("/test/", testHandler)
+	// log.Fatalln(http.ListenAndServe(":8080", nil))
 
 	// p1 := &Page{Title: "test", Body: []byte("This is a first page.")}
 	// p1.save()
