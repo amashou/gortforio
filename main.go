@@ -5,12 +5,16 @@ package main
 import (
 	// "database/sql"
 
-	"crypto/hmac"
-	"crypto/sha256"
-	"encoding/hex"
+	// "crypto/hmac"
+	// "crypto/sha256"
+	// "encoding/hex"
 	"fmt"
-	"io/ioutil"
-	"net/http"
+	"os"
+	"github.com/joho/godotenv"
+	"log"
+	// "io/ioutil"
+	// "net/http"
+	"gopkg.in/ini.v1"
 	// "io/ioutil"
 	// "net/http"
 	// _ "github.com/mattn/go-sqlite3"
@@ -59,55 +63,80 @@ import (
 // 	Age  int
 // }
 
-type Page struct {
-	Title string
-	Body  []byte
+// type Page struct {
+// 	Title string
+// 	Body  []byte
+// }
+
+// func (p *Page) save() error {
+// 	filename := p.Title + ".txt"
+// 	return ioutil.WriteFile(filename, p.Body, 0600)
+// }
+
+// func loadPage(title string) (*Page, error) {
+// 	filename := title + ".txt"
+// 	body, err := ioutil.ReadFile(filename)
+// 	if err != nil {
+// 		return nil, err
+// 	}
+// 	return &Page{Title: title, Body: body}, nil
+// }
+
+// func viewHandler(w http.ResponseWriter, r *http.Request) {
+// 	title := r.URL.Path[len("/view/"):]
+// 	p, _ := loadPage(title)
+// 	fmt.Fprintf(w, "<h2>%s</h2><div>%s</div>", p.Title, p.Body)
+// }
+
+// var DB = map[string]string{
+// 	"User1Key": "User1Secret",
+// 	"User2Key": "User2Secret",
+// }
+
+// func Server(apiKey, sign string, data []byte) {
+// 	apiSecret := DB[apiKey]
+// 	h := hmac.New(sha256.New, []byte(apiSecret))
+// 	h.Write(data)
+// 	expectedHMAC := hex.EncodeToString(h.Sum(nil))
+// 	fmt.Println(sign == expectedHMAC)
+// }
+
+type ConfigList struct {
+	TestKey string
+	TestSecret string
 }
 
-func (p *Page) save() error {
-	filename := p.Title + ".txt"
-	return ioutil.WriteFile(filename, p.Body, 0600)
-}
+var testConfigList ConfigList
 
-func loadPage(title string) (*Page, error) {
-	filename := title + ".txt"
-	body, err := ioutil.ReadFile(filename)
-	if err != nil {
-		return nil, err
+func init() {
+	cfg, _ := ini.Load("config.ini")
+	testConfigList = ConfigList{
+		TestKey: cfg.Section("bitflyer").Key("test_api").String(),
+		TestSecret: cfg.Section("bitflyer").Key("test_secret").String(),
 	}
-	return &Page{Title: title, Body: body}, nil
-}
 
-func viewHandler(w http.ResponseWriter, r *http.Request) {
-	title := r.URL.Path[len("/view/"):]
-	p, _ := loadPage(title)
-	fmt.Fprintf(w, "<h2>%s</h2><div>%s</div>", p.Title, p.Body)
-}
+	// err := godotenv.Load(fmt.Sprintf("%s.env", os.Getenv("GO_ENV")))
+	err := godotenv.Load(".env")
+	if err != nil {
+		log.Fatalln(err)
+	}
 
-var DB = map[string]string{
-	"User1Key": "User1Secret",
-	"User2Key": "User2Secret",
-}
-
-func Server(apiKey, sign string, data []byte) {
-	apiSecret := DB[apiKey]
-	h := hmac.New(sha256.New, []byte(apiSecret))
-	h.Write(data)
-	expectedHMAC := hex.EncodeToString(h.Sum(nil))
-	fmt.Println(sign == expectedHMAC)
 }
 
 func main() {
-	const apiKey = "User1Key"
-	const apiSecret = "User1Secret"
+	fmt.Println("%T, %v\n", testConfigList.TestKey, testConfigList.TestKey)
+	fmt.Println("%T, %v\n", testConfigList.TestSecret, testConfigList.TestSecret)
+	fmt.Println(os.Getenv("TEST_API_KEY"))
+	// const apiKey = "User1Key"
+	// const apiSecret = "User1Secret"
 
-	data := []byte("data")
-	h := hmac.New(sha256.New, []byte(apiSecret))
-	h.Write(data)
-	sign := hex.EncodeToString(h.Sum(nil))
-	fmt.Println(sign)
+	// data := []byte("data")
+	// h := hmac.New(sha256.New, []byte(apiSecret))
+	// h.Write(data)
+	// sign := hex.EncodeToString(h.Sum(nil))
+	// fmt.Println(sign)
 
-	Server(apiKey, sign, data)
+	// Server(apiKey, sign, data)
 
 	// http.HandleFunc("/view/", viewHandler)
 	// http.HandleFunc("/test/", testHandler)
